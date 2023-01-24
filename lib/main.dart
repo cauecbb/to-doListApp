@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:todo/models/item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const App());
@@ -26,9 +29,6 @@ class HomePage extends StatefulWidget {
 
   HomePage() {
     items = [];
-    items.add(Item(title: "Acordar cedo", done: false));
-    items.add(Item(title: "Fazer cardio", done: true));
-    items.add(Item(title: "Levar o cachorro para passear", done: false));
   }
 
   @override
@@ -48,13 +48,35 @@ class _HomePageState extends State<HomePage> {
         ),
       );
       newTaskController.text = "";
+      save();
     });
   }
 
   void remove(int index) {
     setState(() {
       widget.items.removeAt(index);
+      save();
     });
+  }
+
+  Future load() async {
+    var prefs = await SharedPreferences.getInstance();
+    var data = prefs.getString('data') ?? '';
+
+    Iterable decoded = jsonDecode(data);
+    List<Item> result = decoded.map((x) => Item.fromJson(x)).toList();
+    setState(() {
+      widget.items = result;
+    });
+  }
+
+  _HomePageState() {
+    load();
+  }
+
+  save() async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setString('data', jsonEncode(widget.items));
   }
 
   @override
@@ -94,6 +116,7 @@ class _HomePageState extends State<HomePage> {
               onChanged: (value) {
                 setState(() {
                   item.done = value;
+                  save();
                 });
               },
             ),
