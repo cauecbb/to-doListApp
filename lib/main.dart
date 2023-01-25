@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:todo/models/item.dart';
@@ -17,7 +18,7 @@ class App extends StatelessWidget {
       title: 'To-Do List',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.brown,
       ),
       home: HomePage(),
     );
@@ -27,7 +28,7 @@ class App extends StatelessWidget {
 class HomePage extends StatefulWidget {
   var items = [];
 
-  HomePage() {
+  HomePage({super.key}) {
     items = [];
   }
 
@@ -82,13 +83,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.yellow[50],
       appBar: AppBar(
         title: TextFormField(
           controller: newTaskController,
           keyboardType: TextInputType.text,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 22,
+            fontFamily: "Lato Black",
           ),
           decoration: const InputDecoration(
               labelText: "Nova Tarefa",
@@ -105,13 +108,18 @@ class _HomePageState extends State<HomePage> {
           return Dismissible(
             key: Key(item.title),
             background: Container(
-              color: Colors.red.withOpacity(0.5),
+              color: Colors.red.withOpacity(0.85),
             ),
             onDismissed: (direction) {
               remove(index);
             },
             child: CheckboxListTile(
-              title: Text(item.title),
+              title: Text(
+                item.title,
+                style: const TextStyle(
+                  fontSize: 22,
+                ),
+              ),
               value: item.done,
               onChanged: (value) {
                 setState(() {
@@ -123,11 +131,16 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: add,
-        backgroundColor: Colors.brown,
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: SizedBox(
+          width: 85,
+          height: 85,
+          child: FittedBox(
+            child: FloatingActionButton(
+              onPressed: add,
+              backgroundColor: Colors.brown,
+              child: const Icon(Icons.add),
+            ),
+          )),
     );
   }
 }
