@@ -38,6 +38,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var newTaskController = TextEditingController();
+  FocusNode newTaskFocusNode = FocusNode();
 
   void add() {
     setState(() {
@@ -86,6 +87,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.yellow[50],
       appBar: AppBar(
         title: TextFormField(
+          focusNode: newTaskFocusNode,
           controller: newTaskController,
           keyboardType: TextInputType.text,
           style: const TextStyle(
@@ -110,6 +112,16 @@ class _HomePageState extends State<HomePage> {
             background: Container(
               color: Colors.red.withOpacity(0.85),
             ),
+            secondaryBackground: Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 20),
+              color: Colors.red,
+              child: const Text("Delete",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+            ),
             onDismissed: (direction) {
               remove(index);
             },
@@ -131,16 +143,24 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      floatingActionButton: SizedBox(
-          width: 85,
+      floatingActionButton: InkWell(
+        onTap: () {
+          add();
+          FocusScope.of(context).requestFocus(newTaskFocusNode);
+        },
+        child: Container(
+          width: 240,
           height: 85,
-          child: FittedBox(
-            child: FloatingActionButton(
-              onPressed: add,
-              backgroundColor: Colors.brown,
-              child: const Icon(Icons.add),
-            ),
-          )),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.brown,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            border: Border.all(width: 2, color: Colors.brown),
+          ),
+          child: const Icon(Icons.add, size: 40, color: Colors.white),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
