@@ -35,6 +35,6 @@ Será integrado uma api como banco de dados, assim podendo manipular tarefas que
 
 ### Contato:
 
-Linkedin: https://www.linkedin.com/in/cauecbb/
+[Linkedin](https://www.linkedin.com/in/cauecbb/)
 
-Instagram: https://www.instagram.com/cauecbb
+[Instagram](https://www.instagram.com/cauecbb)
